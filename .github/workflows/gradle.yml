@@ -39,9 +39,13 @@ jobs:
     - name: Publish Jars
       uses: actions/upload-artifact@v4
       with:
-        name: Downloads
+        name: Click to Download
         path: build/libs/*-all.jar
 
+    - name: Compile & Upload Docs
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: build/dokka/html
 
   # Deploy job
   deploy:
@@ -61,10 +65,6 @@ jobs:
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
-    - name: Compile & Upload Docs
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: build/dokka/html
 
     - name: Deploy to GitHub Pages
       id: deployment

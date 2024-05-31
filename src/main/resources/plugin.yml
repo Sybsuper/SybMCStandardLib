@@ -1,0 +1,5 @@
+name: SybMCStandardLib
+version: '${version}'
+main: com.sybsuper.sybmcstandardlib.SybMCStandardLib
+folia-supported: true
+api-version: '1.20'

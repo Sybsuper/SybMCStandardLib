@@ -1,5 +1,6 @@
-package com.sybsuper.sybmcstandardlib
+package com.sybsuper.sybmcstandardlib.commandsender
 
+import com.sybsuper.sybmcstandardlib.scheduler.runNextTick
 import com.tcoded.folialib.wrapper.task.WrappedTask
 import io.mockk.*
 import net.kyori.adventure.text.Component
@@ -13,22 +14,23 @@ import org.junit.jupiter.api.Test
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-class PlayerAPITest {
+class CommandSenderAPITest {
     private lateinit var player: Player
-
+    private val scheduleAPIClass = "com.sybsuper.sybmcstandardlib.scheduler.SchedulerAPIKt"
+    
     @BeforeEach
     fun setup() {
         player = mockk(relaxed = true)
 
         mockkStatic(Bukkit::class)
         every { Bukkit.dispatchCommand(any(), any()) } returns true
-        mockkStatic("com.sybsuper.sybmcstandardlib.SchedulerAPIKt")
+        mockkStatic(scheduleAPIClass)
     }
 
     @AfterEach
     fun breakDown() {
         unmockkStatic(Bukkit::class)
-        unmockkStatic("com.sybsuper.sybmcstandardlib.SchedulerAPIKt")
+        unmockkStatic(scheduleAPIClass)
     }
 
     @Test

@@ -1,5 +1,6 @@
-package com.sybsuper.sybmcstandardlib
+package com.sybsuper.sybmcstandardlib.scheduler
 
+import com.sybsuper.sybmcstandardlib.SybMCStandardLib
 import com.tcoded.folialib.wrapper.task.WrappedTask
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer

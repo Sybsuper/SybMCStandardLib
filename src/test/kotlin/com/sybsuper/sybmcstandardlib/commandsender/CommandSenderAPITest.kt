@@ -34,6 +34,20 @@ class CommandSenderAPITest {
     }
 
     @Test
+    fun `sendMessage with color should send message with color`() {
+        // Arrange
+        val msg = "Message"
+        val color = NamedTextColor.BLUE
+
+        // Act
+        player.sendMessage(msg, color)
+
+        // Assert
+        val expectedComponent = Component.text(msg, color)
+        verify { player.sendMessage(expectedComponent) }
+    }
+
+    @Test
     fun `sendError should call sendMessage with a red colored text component`() {
         // Act
         val msg = "Error message"

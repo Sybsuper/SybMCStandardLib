@@ -3,6 +3,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.dokka") version "1.9.20"
+    id("jacoco")
+    id("maven-publish")
 }
 
 group = "com.sybsuper"
@@ -24,32 +26,63 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+val javaComponent: SoftwareComponent = components["java"]
 
-tasks.build {
-    dependsOn(tasks.shadowJar)
-    dependsOn(tasks.dokkaHtml)
-}
+tasks {
+    build {
+        finalizedBy(shadowJar)
+        finalizedBy(dokkaHtml)
+        finalizedBy(jacocoTestReport)
+    }
 
-tasks.dokkaHtml.configure {
-    dokkaSourceSets {
-        configureEach {
-            samples.from("$projectDir/src/test/kotlin/samples/")
+    test {
+        useJUnitPlatform()
+    }
+
+    jacocoTestReport {
+        dependsOn(test)
+        finalizedBy(jacocoTestCoverageVerification)
+    }
+
+    jacocoTestCoverageVerification {
+        dependsOn(jacocoTestReport)
+        violationRules {
+            rule {
+                limit {
+                    counter = "BRANCH"
+                    minimum = "0.6".toBigDecimal() // todo: increase this later
+                }
+            }
+        }
+    }
+
+    dokkaHtml.configure {
+        dokkaSourceSets {
+            configureEach {
+                samples.from("$projectDir/src/test/kotlin/samples/")
+            }
+        }
+    }
+
+    shadowJar {
+        dependencies {
+            include(dependency("com.tcoded:FoliaLib:0.3.1"))
+            include(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+        }
+
+        relocate("com.tcoded.folialib", "com.sybsuper.sybmcstandardlib.folialib")
+    }
+
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = "sybmcstandardlib"
+
+                from(javaComponent)
+            }
         }
     }
 }
-
-tasks.shadowJar {
-    dependencies {
-        include(dependency("com.tcoded:FoliaLib:0.3.1"))
-        include(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
-    }
-
-    relocate("com.tcoded.folialib", "com.sybsuper.sybmcstandardlib.folialib")
-}
-
 val targetJavaVersion = 17
 java {
     val javaVersion = JavaVersion.toVersion(targetJavaVersion)
@@ -58,6 +91,9 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 tasks.withType<JavaCompile>().configureEach {

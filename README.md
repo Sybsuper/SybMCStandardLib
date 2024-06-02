@@ -1,4 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/sybsuper/sybmcstandardlib/badge)](https://www.codefactor.io/repository/github/sybsuper/sybmcstandardlib)
+[![codecov](https://codecov.io/github/Sybsuper/SybMCStandardLib/graph/badge.svg?token=TJR9IQTNBG)](https://codecov.io/github/Sybsuper/SybMCStandardLib)
 [![](https://jitpack.io/v/sybsuper/SybMCStandardLib.svg)](https://jitpack.io/#sybsuper/SybMCStandardLib)
 ![Banner](https://sybsuper.com/banner.png)
 

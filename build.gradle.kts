@@ -41,6 +41,12 @@ tasks {
 
     jacocoTestReport {
         dependsOn(test)
+
+        reports {
+            xml.required = true
+            html.required = true
+        }
+
         finalizedBy(jacocoTestCoverageVerification)
     }
 
